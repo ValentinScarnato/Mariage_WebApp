@@ -11,6 +11,7 @@ import { BottomNav } from "@/components/bottom-nav";
 import { useToast } from "@/components/toast";
 
 const NONE = "__aucun_lieu__";
+const NONE_PARAM = "aucun";
 
 export function AddView({ initialSlug }: { initialSlug?: string }) {
   const router = useRouter();
@@ -18,7 +19,9 @@ export function AddView({ initialSlug }: { initialSlug?: string }) {
   const { name, setName } = useGuestName();
   const { showToast } = useToast();
 
-  const [locationChoice, setLocationChoice] = useState(initialSlug ?? "");
+  const [locationChoice, setLocationChoice] = useState(
+    initialSlug === NONE_PARAM ? NONE : (initialSlug ?? "")
+  );
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
