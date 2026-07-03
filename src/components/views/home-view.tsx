@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useGalleryData } from "@/lib/use-gallery-data";
 import { PhotoGrid } from "@/components/photo-grid";
@@ -15,14 +16,16 @@ export function HomeView() {
 
   return (
     <div className="animate-fade-up pb-[100px]">
-      <div className="relative h-[320px] overflow-hidden bg-gradient-to-br from-[#aab48f] via-[#8c9a7b] to-[#74815f]">
-        <div
-          className="absolute inset-0 opacity-[.16]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 30% 20%, #fff 0, transparent 40%), radial-gradient(circle at 80% 70%, #fff 0, transparent 35%)",
-          }}
+      <div className="relative h-[360px] overflow-hidden bg-[#3f4b38]">
+        <Image
+          src="/chateau-tresserve.jpg"
+          alt={siteConfig.venue}
+          fill
+          priority
+          sizes="(max-width: 480px) 100vw, 480px"
+          className="object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/55" />
         <div className="absolute inset-0 flex flex-col items-center justify-center px-8 pb-6 pt-14 text-center text-cream">
           <div className="mb-5 flex h-[58px] w-[58px] items-center justify-center rounded-full border border-cream/55 font-serif text-[22px] tracking-wide">
             {siteConfig.partner1.charAt(0)}

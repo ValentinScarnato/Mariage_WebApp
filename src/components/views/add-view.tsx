@@ -57,7 +57,7 @@ export function AddView({ initialSlug }: { initialSlug?: string }) {
       if (insertError) throw insertError;
 
       showToast("Photo ajoutée à la galerie !");
-      router.push(`/lieu/${location.slug}`);
+      router.push("/");
     } catch {
       showToast("Une erreur est survenue, réessayez.");
     } finally {
