@@ -24,7 +24,8 @@ export function AdminPhotos({ locations }: { locations: Location[] }) {
     load();
   }, []);
 
-  const locationName = (id: string) => locations.find((l) => l.id === id)?.name ?? "?";
+  const locationName = (id: string | null) =>
+    id ? (locations.find((l) => l.id === id)?.name ?? "?") : "Sans lieu (mise en avant)";
 
   const deletePhoto = async (id: string) => {
     if (!confirm("Supprimer définitivement cette photo ?")) return;

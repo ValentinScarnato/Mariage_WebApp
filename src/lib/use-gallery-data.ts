@@ -51,7 +51,7 @@ export function useGalleryData() {
 
   const gridPhotos: GridPhoto[] = photos.map((p) => ({
     ...p,
-    locationName: locationById[p.location_id]?.name ?? "",
+    locationName: (p.location_id ? locationById[p.location_id]?.name : "") ?? "",
     commentCount: commentCounts[p.id] ?? 0,
   }));
 

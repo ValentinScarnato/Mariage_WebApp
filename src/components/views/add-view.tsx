@@ -10,20 +10,20 @@ import { Chip } from "@/components/chip";
 import { BottomNav } from "@/components/bottom-nav";
 import { useToast } from "@/components/toast";
 
+const NONE = "__aucun_lieu__";
+
 export function AddView({ initialSlug }: { initialSlug?: string }) {
   const router = useRouter();
   const { locations } = useGalleryData();
   const { name, setName } = useGuestName();
   const { showToast } = useToast();
 
-  const [locationSlug, setLocationSlug] = useState(initialSlug ?? "");
+  const [locationChoice, setLocationChoice] = useState(initialSlug ?? "");
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const effectiveSlug = locationSlug || locations[0]?.slug || "";
 
   const onPickFile = (f: File | null) => {
     setFile(f);
@@ -32,15 +32,15 @@ export function AddView({ initialSlug }: { initialSlug?: string }) {
   };
 
   const submit = async () => {
-    if (!file || !effectiveSlug || submitting) return;
-    const location = locations.find((l) => l.slug === effectiveSlug);
-    if (!location) return;
+    if (!file || !locationChoice || submitting) return;
+    const location = locationChoice === NONE ? null : locations.find((l) => l.slug === locationChoice);
+    if (location === undefined) return;
 
     setSubmitting(true);
     try {
       const compressed = await compressPhoto(file);
       const filename = randomPhotoFilename(file.name || "photo.jpg");
-      const path = `${location.slug}/${filename}`;
+      const path = `${location ? location.slug : "sans-lieu"}/${filename}`;
 
       const { error: uploadError } = await supabase.storage
         .from("photos")
@@ -49,7 +49,7 @@ export function AddView({ initialSlug }: { initialSlug?: string }) {
 
       const authorName = name.trim() || null;
       const { error: insertError } = await supabase.from("photos").insert({
-        location_id: location.id,
+        location_id: location ? location.id : null,
         storage_path: path,
         caption: caption.trim() || null,
         author_name: authorName,
@@ -83,17 +83,22 @@ export function AddView({ initialSlug }: { initialSlug?: string }) {
       />
 
       <label className="mb-2.5 block text-[12.5px] font-medium tracking-wide text-sage-dark">
-        2 · VOTRE TABLE / LIEU
+        2 · VOTRE TABLE / LIEU <span className="font-normal normal-case tracking-normal text-muted-3">(ou aucun)</span>
       </label>
       <div className="mb-6 flex flex-wrap gap-2">
         {locations.map((loc) => (
           <Chip
             key={loc.id}
             label={loc.name}
-            active={effectiveSlug === loc.slug}
-            onClick={() => setLocationSlug(loc.slug)}
+            active={locationChoice === loc.slug}
+            onClick={() => setLocationChoice(loc.slug)}
           />
         ))}
+        <Chip
+          label="Sans lieu"
+          active={locationChoice === NONE}
+          onClick={() => setLocationChoice(NONE)}
+        />
       </div>
 
       <label className="mb-2.5 block text-[12.5px] font-medium tracking-wide text-sage-dark">
@@ -140,7 +145,7 @@ export function AddView({ initialSlug }: { initialSlug?: string }) {
 
       <button
         onClick={submit}
-        disabled={!file || submitting}
+        disabled={!file || !locationChoice || submitting}
         className="h-[54px] w-full rounded-2xl bg-sage text-[15px] font-medium tracking-wide text-cream disabled:opacity-50"
       >
         {submitting ? "Envoi en cours…" : "Partager avec les mariés"}

@@ -16,7 +16,7 @@ create table if not exists locations (
 
 create table if not exists photos (
   id uuid primary key default gen_random_uuid(),
-  location_id uuid not null references locations(id) on delete cascade,
+  location_id uuid references locations(id) on delete cascade,
   storage_path text not null,
   caption text,
   author_name text,

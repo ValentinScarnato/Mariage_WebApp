@@ -44,9 +44,11 @@ export function PhotoGrid({
                 {photo.caption}
               </span>
             )}
-            <span className="text-[10px] uppercase tracking-wider text-cream/85">
-              {photo.locationName}
-            </span>
+            {photo.locationName && (
+              <span className="text-[10px] uppercase tracking-wider text-cream/85">
+                {photo.locationName}
+              </span>
+            )}
           </div>
           {!!photo.commentCount && (
             <div className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-cream/90 px-[7px] py-[3px] text-[10.5px] font-medium text-sage-dark">

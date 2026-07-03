@@ -92,9 +92,11 @@ export function Lightbox({
           </svg>
         </button>
         <div className="text-center">
-          <div className="text-[10px] uppercase tracking-[2px] text-cream/60">
-            {photo.locationName}
-          </div>
+          {photo.locationName && (
+            <div className="text-[10px] uppercase tracking-[2px] text-cream/60">
+              {photo.locationName}
+            </div>
+          )}
           <div className="mt-0.5 text-[12px] text-cream/85">
             {index + 1} / {photos.length}
           </div>

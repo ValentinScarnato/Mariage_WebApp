@@ -11,7 +11,7 @@ export interface Location {
 
 export interface Photo {
   id: string;
-  location_id: string;
+  location_id: string | null;
   storage_path: string;
   caption: string | null;
   author_name: string | null;
