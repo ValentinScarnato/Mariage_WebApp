@@ -45,7 +45,10 @@ export function AdminDashboard() {
         </button>
       </div>
 
-      <div className="px-5 pb-4">
+      <div className="flex flex-wrap gap-x-4 gap-y-1 px-5 pb-4">
+        <Link href="/" className="text-[13px] font-medium text-sage-dark underline">
+          ← Retour à l&apos;accueil
+        </Link>
         <Link href="/admin/qrcodes" className="text-[13px] font-medium text-sage-dark underline">
           Générer les QR codes →
         </Link>
