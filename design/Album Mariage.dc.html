@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; background: #e3ddd0; font-family: 'Jost', system-ui, sans-serif; display: flex; justify-content: center; align-items: flex-start; padding: 28px 0; min-height: 100vh; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+</style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #f5f1e8; border-radius: 46px; position: relative; overflow: hidden; box-shadow: 0 2px 4px rgba(60,58,51,.08), 0 30px 70px -20px rgba(60,58,51,.4); border: 1px solid rgba(60,58,51,.12);">
+
+  <!-- status bar -->
+  <div style="position: absolute; top: 0; left: 0; right: 0; height: 44px; z-index: 40; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font-size: 13px; font-weight: 500; color: #3b3a33; pointer-events: none;">
+    <span>9:41</span>
+    <span style="display: flex; gap: 5px; align-items: center; opacity: .85;">
+      <svg width="17" height="11" viewBox="0 0 17 11" fill="#3b3a33"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="4.5" width="3" height="6.5" rx="1"/><rect x="9" y="2" width="3" height="9" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+      <svg width="16" height="11" viewBox="0 0 24 16" fill="none"><rect x="1" y="1" width="20" height="14" rx="3.5" stroke="#3b3a33" stroke-width="1.5" opacity=".5"/><rect x="3" y="3" width="15" height="10" rx="1.5" fill="#3b3a33"/><rect x="22" y="5.5" width="1.5" height="5" rx=".75" fill="#3b3a33" opacity=".5"/></svg>
+    </span>
+  </div>
+
+  <!-- SCROLL AREA -->
+  <div style="position: absolute; inset: 0 0 84px 0; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+
+    <!-- ============ ACCUEIL ============ -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div style="animation: fadeUp .4s ease both;">
+      <!-- hero cover -->
+      <div style="position: relative; height: 372px; background: linear-gradient(165deg, #aab48f 0%, #8c9a7b 55%, #74815f 100%); overflow: hidden;">
+        <div style="position: absolute; inset: 0; opacity: .16; background-image: radial-gradient(circle at 30% 20%, #ffffff 0, transparent 40%), radial-gradient(circle at 80% 70%, #ffffff 0, transparent 35%);"></div>
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 30px 30px; color: #fbf9f2;">
+          <div style="width: 58px; height: 58px; border: 1px solid rgba(251,249,242,.55); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 20px;">C<span style="font-size:14px;opacity:.7;margin:0 1px;">&</span>J</div>
+          <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; opacity: .85; font-weight: 400;">Se sont dit oui</div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 52px; line-height: 1.02; font-weight: 500; margin: 12px 0 14px;">Camille<br><span style="font-size: 26px; font-style: italic; opacity: .9;">&amp;</span><br>Julien</div>
+          <div style="font-size: 12px; letter-spacing: 3px; opacity: .9;">14 · 06 · 2025 — PROVENCE</div>
+        </div>
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(to top, #f5f1e8, transparent);"></div>
+      </div>
+
+      <!-- intro -->
+      <div style="padding: 4px 24px 18px; text-align: center;">
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 21px; font-style: italic; color: #5b6650; margin: 0 0 6px; line-height: 1.35;">Vos photos, notre plus beau souvenir</p>
+        <p style="font-size: 13px; color: #8a877c; margin: 0; line-height: 1.5;">Partagez vos clichés de la journée et laissez-nous un petit mot.</p>
+      </div>
+
+      <!-- primary actions -->
+      <div style="display: flex; gap: 10px; padding: 0 24px 22px;">
+        <button onClick="{{ goAdd }}" style="flex: 1; height: 52px; border: none; border-radius: 14px; background: #8c9a7b; color: #fbf9f2; font-family: 'Jost', sans-serif; font-size: 14.5px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbf9f2" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Ajouter des photos
+        </button>
+        <button onClick="{{ goGuestbook }}" style="width: 56px; height: 52px; border: 1px solid rgba(60,58,51,.16); border-radius: 14px; background: #fcfaf4; color: #6e7c60; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e7c60" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 20l1.4-4.2A8.38 8.38 0 0 1 3.5 12 8.5 8.5 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8z"/></svg>
+        </button>
+      </div>
+
+      <!-- filter tables -->
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 0 24px 12px;">
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; color: #3b3a33; margin: 0;">Les souvenirs</h2>
+        <span style="font-size: 12px; color: #a3a091; letter-spacing: .3px;">{{ photoCount }} photos</span>
+      </div>
+      <div style="display: flex; gap: 8px; overflow-x: auto; padding: 0 24px 18px; scroll-padding: 24px;">
+        <sc-for list="{{ filterChips }}" as="chip" hint-placeholder-count="4">
+          <button onClick="{{ chip.set }}" style="{{ chip.style }}">{{ chip.name }}</button>
+        </sc-for>
+      </div>
+
+      <!-- grid -->
+      <div style="padding: 0 20px 30px; column-count: 2; column-gap: 10px;">
+        <sc-for list="{{ gridPhotos }}" as="photo" hint-placeholder-count="8">
+          <div onClick="{{ photo.open }}" style="break-inside: avoid; margin-bottom: 10px; position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 1px 3px rgba(60,58,51,.1);">
+            <div style="{{ photo.tile }}"></div>
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(45,44,38,.5), transparent 45%);"></div>
+            <div style="position: absolute; left: 9px; bottom: 8px; right: 9px; display: flex; flex-direction: column; gap: 2px;">
+              <sc-if value="{{ photo.hasCaption }}" hint-placeholder-val="{{ true }}">
+                <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: #fbf9f2; line-height: 1.15;">{{ photo.caption }}</span>
+              </sc-if>
+              <span style="font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(251,249,242,.85);">{{ photo.tableName }}</span>
+            </div>
+            <sc-if value="{{ photo.hasComments }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; top: 8px; right: 8px; background: rgba(251,249,242,.92); border-radius: 20px; padding: 3px 7px; display: flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 500; color: #6e7c60;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6e7c60" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 20l1.4-4.2A8.38 8.38 0 0 1 3.5 12 8.5 8.5 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8z"/></svg>
+                {{ photo.commentCount }}
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ GALERIE ============ -->
+    <sc-if value="{{ isGallery }}" hint-placeholder-val="{{ false }}">
+    <div style="animation: fadeUp .35s ease both;">
+      <div style="padding: 58px 24px 6px; text-align: center;">
+        <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a3a091;">Camille &amp; Julien</div>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 500; color: #3b3a33; margin: 4px 0 0;">Galerie</h1>
+      </div>
+      <div style="display: flex; gap: 8px; overflow-x: auto; padding: 16px 24px 18px;">
+        <sc-for list="{{ filterChips }}" as="chip" hint-placeholder-count="4">
+          <button onClick="{{ chip.set }}" style="{{ chip.style }}">{{ chip.name }}</button>
+        </sc-for>
+      </div>
+      <div style="text-align: center; margin: -6px 0 14px; font-size: 12.5px; color: #a3a091;">{{ filterLabel }}</div>
+      <div style="padding: 0 20px 30px; column-count: 2; column-gap: 10px;">
+        <sc-for list="{{ gridPhotos }}" as="photo" hint-placeholder-count="8">
+          <div onClick="{{ photo.open }}" style="break-inside: avoid; margin-bottom: 10px; position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 1px 3px rgba(60,58,51,.1);">
+            <div style="{{ photo.tile }}"></div>
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(45,44,38,.5), transparent 45%);"></div>
+            <div style="position: absolute; left: 9px; bottom: 8px; right: 9px; display: flex; flex-direction: column; gap: 2px;">
+              <sc-if value="{{ photo.hasCaption }}" hint-placeholder-val="{{ true }}">
+                <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: #fbf9f2; line-height: 1.15;">{{ photo.caption }}</span>
+              </sc-if>
+              <span style="font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(251,249,242,.85);">{{ photo.tableName }}</span>
+            </div>
+            <sc-if value="{{ photo.hasComments }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; top: 8px; right: 8px; background: rgba(251,249,242,.92); border-radius: 20px; padding: 3px 7px; display: flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 500; color: #6e7c60;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6e7c60" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 20l1.4-4.2A8.38 8.38 0 0 1 3.5 12 8.5 8.5 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8z"/></svg>
+                {{ photo.commentCount }}
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ AJOUTER ============ -->
+    <sc-if value="{{ isAdd }}" hint-placeholder-val="{{ false }}">
+    <div style="animation: fadeUp .35s ease both; padding: 58px 24px 30px;">
+      <div style="text-align: center; margin-bottom: 26px;">
+        <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a3a091;">Partagez</div>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 500; color: #3b3a33; margin: 4px 0 0;">Ajouter des photos</h1>
+      </div>
+
+      <label style="display: block; font-size: 12.5px; font-weight: 500; letter-spacing: .5px; color: #6e7c60; margin-bottom: 10px;">1 · VOTRE TABLE</label>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px;">
+        <sc-for list="{{ uploadChips }}" as="chip" hint-placeholder-count="4">
+          <button onClick="{{ chip.set }}" style="{{ chip.style }}">{{ chip.name }}</button>
+        </sc-for>
+      </div>
+
+      <label style="display: block; font-size: 12.5px; font-weight: 500; letter-spacing: .5px; color: #6e7c60; margin-bottom: 10px;">2 · VOS PHOTOS</label>
+      <div onClick="{{ submitUpload }}" style="border: 1.5px dashed #b6bca6; border-radius: 18px; background: #fcfaf4; padding: 38px 20px; text-align: center; cursor: pointer; margin-bottom: 24px;">
+        <div style="width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 50%; background: #eef0e4; display: flex; align-items: center; justify-content: center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8c9a7b" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #3b3a33;">Prendre ou choisir une photo</div>
+        <div style="font-size: 12.5px; color: #a3a091; margin-top: 5px;">Appuyez ici pour ouvrir votre appareil</div>
+      </div>
+
+      <label style="display: block; font-size: 12.5px; font-weight: 500; letter-spacing: .5px; color: #6e7c60; margin-bottom: 10px;">3 · UN PETIT MOT <span style="color:#bdbaad;font-weight:400;text-transform:none;letter-spacing:0;">(facultatif)</span></label>
+      <textarea value="{{ uploadCaption }}" onChange="{{ setUploadCaption }}" placeholder="Un souvenir, une anecdote…" style="width: 100%; min-height: 74px; resize: none; border: 1px solid rgba(60,58,51,.16); border-radius: 14px; background: #fcfaf4; padding: 14px; font-family: 'Jost', sans-serif; font-size: 14px; color: #3b3a33; margin-bottom: 24px;"></textarea>
+
+      <button onClick="{{ submitUpload }}" style="width: 100%; height: 54px; border: none; border-radius: 15px; background: #8c9a7b; color: #fbf9f2; font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: .3px; cursor: pointer;">Partager avec les mariés</button>
+      <p style="text-align: center; font-size: 11.5px; color: #b0ad9f; margin: 14px 0 0; line-height: 1.5;">Vos photos apparaîtront dans la galerie de la table choisie.</p>
+    </div>
+    </sc-if>
+
+    <!-- ============ LIVRE D'OR ============ -->
+    <sc-if value="{{ isGuestbook }}" hint-placeholder-val="{{ false }}">
+    <div style="animation: fadeUp .35s ease both; padding: 58px 24px 30px;">
+      <div style="text-align: center; margin-bottom: 26px;">
+        <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a3a091;">Vos mots doux</div>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 500; color: #3b3a33; margin: 4px 0 0;">Livre d'or</h1>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px;">
+        <sc-for list="{{ messagesList }}" as="msg" hint-placeholder-count="3">
+          <div style="background: #fcfaf4; border: 1px solid rgba(60,58,51,.08); border-radius: 16px; padding: 18px 18px 16px; box-shadow: 0 1px 3px rgba(60,58,51,.05);">
+            <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 10px;">
+              <div style="width: 38px; height: 38px; border-radius: 50%; background: #eef0e4; color: #6e7c60; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 19px;">{{ msg.initial }}</div>
+              <div>
+                <div style="font-size: 14px; font-weight: 500; color: #3b3a33;">{{ msg.name }}</div>
+                <div style="font-size: 11px; color: #b0ad9f;">{{ msg.date }}</div>
+              </div>
+            </div>
+            <p style="font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; line-height: 1.4; color: #4a4a41; margin: 0;">« {{ msg.text }} »</p>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background: #eef0e4; border-radius: 18px; padding: 20px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 21px; color: #3b3a33; margin-bottom: 14px; text-align: center;">Laissez votre mot</div>
+        <input value="{{ draftName }}" onChange="{{ setDraftName }}" placeholder="Votre nom" style="width: 100%; height: 46px; border: 1px solid rgba(60,58,51,.14); border-radius: 12px; background: #fcfaf4; padding: 0 14px; font-family: 'Jost', sans-serif; font-size: 14px; color: #3b3a33; margin-bottom: 10px;">
+        <textarea value="{{ draftMsg }}" onChange="{{ setDraftMsg }}" placeholder="Votre message aux mariés…" style="width: 100%; min-height: 72px; resize: none; border: 1px solid rgba(60,58,51,.14); border-radius: 12px; background: #fcfaf4; padding: 12px 14px; font-family: 'Jost', sans-serif; font-size: 14px; color: #3b3a33; margin-bottom: 12px;"></textarea>
+        <button onClick="{{ addMessage }}" style="width: 100%; height: 48px; border: none; border-radius: 12px; background: #8c9a7b; color: #fbf9f2; font-family: 'Jost', sans-serif; font-size: 14.5px; font-weight: 500; cursor: pointer;">Signer le livre d'or</button>
+      </div>
+    </div>
+    </sc-if>
+
+  </div>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: rgba(251,249,242,.94); backdrop-filter: blur(12px); border-top: 1px solid rgba(60,58,51,.08); display: flex; align-items: flex-start; padding: 12px 12px 0; z-index: 30;">
+    <button onClick="{{ goHome }}" style="{{ navHome }}">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/></svg>
+      <span style="font-size: 10.5px; letter-spacing: .3px;">Accueil</span>
+    </button>
+    <button onClick="{{ goGallery }}" style="{{ navGallery }}">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span style="font-size: 10.5px; letter-spacing: .3px;">Galerie</span>
+    </button>
+    <button onClick="{{ goAdd }}" style="{{ navAdd }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      <span style="font-size: 10.5px; letter-spacing: .3px;">Ajouter</span>
+    </button>
+    <button onClick="{{ goGuestbook }}" style="{{ navGuestbook }}">
+      <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 20l1.4-4.2A8.38 8.38 0 0 1 3.5 12 8.5 8.5 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8z"/></svg>
+      <span style="font-size: 10.5px; letter-spacing: .3px;">Livre d'or</span>
+    </button>
+  </div>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position: absolute; inset: 0; z-index: 50; background: #201f1b; display: flex; flex-direction: column; animation: lbIn .25s ease both;">
+    <!-- top bar -->
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 48px 20px 12px; z-index: 3;">
+      <button onClick="{{ closeLightbox }}" style="width: 40px; height: 40px; border: none; border-radius: 50%; background: rgba(251,249,242,.14); color: #fbf9f2; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbf9f2" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div style="text-align: center;">
+        <div style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(251,249,242,.6);">Table {{ current.tableName }}</div>
+        <div style="font-size: 12px; color: rgba(251,249,242,.85); margin-top: 2px;">{{ current.position }}</div>
+      </div>
+      <button onClick="{{ toggleSlideshow }}" style="{{ playBtn }}">
+        <sc-if value="{{ isPlaying }}" hint-placeholder-val="{{ false }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        </sc-if>
+        <sc-if value="{{ isNotPlaying }}" hint-placeholder-val="{{ true }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 7 5.5z"/></svg>
+        </sc-if>
+      </button>
+    </div>
+
+    <!-- image -->
+    <div ref="{{ swipeRef }}" style="flex: 1; position: relative; display: flex; align-items: center; justify-content: center; padding: 0 12px; min-height: 0;">
+      <div style="{{ current.bigTile }}"></div>
+      <button onClick="{{ prevPhoto }}" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border: none; border-radius: 50%; background: rgba(32,31,27,.5); color: #fbf9f2; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbf9f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button onClick="{{ nextPhoto }}" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border: none; border-radius: 50%; background: rgba(32,31,27,.5); color: #fbf9f2; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbf9f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- caption + comments -->
+    <div style="background: #f5f1e8; border-radius: 22px 22px 0 0; max-height: 300px; overflow-y: auto; padding: 20px 22px 24px;">
+      <sc-if value="{{ current.hasCaption }}" hint-placeholder-val="{{ true }}">
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-style: italic; color: #3b3a33; margin: 0 0 4px; line-height: 1.3;">{{ current.caption }}</p>
+      </sc-if>
+      <div style="display: flex; align-items: center; gap: 7px; font-size: 12px; color: #a3a091; margin-bottom: 16px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a091" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 20l1.4-4.2A8.38 8.38 0 0 1 3.5 12 8.5 8.5 0 0 1 12 3.5a8.5 8.5 0 0 1 9 8z"/></svg>
+        {{ current.commentLabel }}
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+        <sc-for list="{{ current.comments }}" as="c" hint-placeholder-count="1">
+          <div style="display: flex; gap: 10px;">
+            <div style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #eef0e4; color: #6e7c60; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 15px;">{{ c.initial }}</div>
+            <div style="background: #fcfaf4; border-radius: 4px 14px 14px 14px; padding: 9px 13px; flex: 1;">
+              <div style="font-size: 12.5px; font-weight: 500; color: #3b3a33; margin-bottom: 2px;">{{ c.name }}</div>
+              <div style="font-size: 13.5px; color: #55544b; line-height: 1.4;">{{ c.text }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <input value="{{ draftComment }}" onChange="{{ setDraftComment }}" placeholder="Ajouter un commentaire…" style="flex: 1; height: 46px; border: 1px solid rgba(60,58,51,.14); border-radius: 23px; background: #fcfaf4; padding: 0 16px; font-family: 'Jost', sans-serif; font-size: 14px; color: #3b3a33;">
+        <button onClick="{{ addComment }}" style="flex: none; width: 46px; height: 46px; border: none; border-radius: 50%; background: #8c9a7b; color: #fbf9f2; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fbf9f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ TOAST ============ -->
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+  <div style="position: absolute; bottom: 100px; left: 50%; z-index: 60; background: #3b3a33; color: #f5f1e8; padding: 12px 20px; border-radius: 30px; font-size: 13.5px; box-shadow: 0 8px 24px rgba(0,0,0,.25); display: flex; align-items: center; gap: 9px; white-space: nowrap; animation: toastIn .3s ease both;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aab48f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    {{ toast }}
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 390, &quot;height&quot;: 900}}">
+class Component extends DCLogic {
+  tableList = [
+    { id: 'laurier', name: 'Laurier' },
+    { id: 'olivier', name: 'Olivier' },
+    { id: 'pivoine', name: 'Pivoine' },
+    { id: 'vigne', name: 'Vigne' },
+  ];
+
+  grads = [
+    'linear-gradient(140deg,#b9c1a6,#96a081)',
+    'linear-gradient(140deg,#ecdfc9,#d8c19a)',
+    'linear-gradient(140deg,#e3d0cc,#caa9a3)',
+    'linear-gradient(140deg,#cfd0c6,#a9ab9c)',
+    'linear-gradient(140deg,#9aa789,#78876a)',
+    'linear-gradient(140deg,#e6dcc6,#cdbfa2)',
+    'linear-gradient(140deg,#d9c8bf,#c0a89d)',
+    'linear-gradient(140deg,#c8cbba,#a4a88f)',
+  ];
+
+  state = {
+    tab: 'home',
+    filter: 'all',
+    lightbox: null,
+    playing: false,
+    toast: '',
+    draftComment: '',
+    draftName: '',
+    draftMsg: '',
+    uploadTable: 'laurier',
+    uploadCaption: '',
+    photos: [
+      { id: 1, table: 'laurier', g: 0, h: 210, caption: 'Sous la tonnelle', comments: [{ name: 'Mamie Renée', text: 'Quelle belle journée, mes chéris.' }] },
+      { id: 2, table: 'olivier', g: 1, h: 158, caption: '', comments: [] },
+      { id: 3, table: 'pivoine', g: 2, h: 228, caption: 'Le premier pas de danse', comments: [{ name: 'Léa', text: 'La plus belle des mariées !' }, { name: 'Tom', text: 'Un moment magique.' }] },
+      { id: 4, table: 'vigne', g: 3, h: 176, caption: '', comments: [] },
+      { id: 5, table: 'laurier', g: 4, h: 200, caption: 'Les vœux', comments: [] },
+      { id: 6, table: 'olivier', g: 5, h: 150, caption: '', comments: [{ name: 'Paul', text: 'Superbe !' }] },
+      { id: 7, table: 'pivoine', g: 6, h: 214, caption: '', comments: [] },
+      { id: 8, table: 'vigne', g: 7, h: 168, caption: "Le vin d'honneur", comments: [] },
+      { id: 9, table: 'laurier', g: 1, h: 190, caption: '', comments: [] },
+      { id: 10, table: 'olivier', g: 0, h: 222, caption: 'Rires à table', comments: [] },
+      { id: 11, table: 'pivoine', g: 3, h: 160, caption: '', comments: [] },
+      { id: 12, table: 'vigne', g: 4, h: 198, caption: '', comments: [] },
+    ],
+    messages: [
+      { name: 'Grand-père Marcel', text: "Tant de bonheur dans une seule journée. Nous vous aimons.", date: 'il y a 1 h' },
+      { name: 'Sophie & Marc', text: "Merci de nous avoir réunis pour célébrer votre amour.", date: 'il y a 3 h' },
+      { name: 'Les copains de la fac', text: "À la vie, à l'amour ! On vous adore.", date: 'hier soir' },
+    ],
+  };
+
+  componentWillUnmount() { this.stop(); }
+
+  stop() { if (this._iv) { clearInterval(this._iv); this._iv = null; } }
+
+  tName(id) { const t = this.tableList.find(t => t.id === id); return t ? t.name : ''; }
+  initial(s) { return (s || '?').trim().charAt(0).toUpperCase(); }
+
+  filtered(s) {
+    const st = s || this.state;
+    return st.filter === 'all' ? st.photos : st.photos.filter(p => p.table === st.filter);
+  }
+
+  setTab = (tab) => { this.stop(); this.setState({ tab, lightbox: null, playing: false }); };
+  setFilter = (filter) => { this.stop(); this.setState({ filter, lightbox: null, playing: false }); };
+  openLightbox = (i) => { this.setState({ lightbox: i }); };
+  closeLightbox = () => { this.stop(); this.setState({ lightbox: null, playing: false }); };
+
+  nextPhoto = () => { this.setState(s => { const F = this.filtered(s); return { lightbox: F.length ? (s.lightbox + 1) % F.length : 0 }; }); };
+  prevPhoto = () => { this.setState(s => { const F = this.filtered(s); return { lightbox: F.length ? (s.lightbox - 1 + F.length) % F.length : 0 }; }); };
+
+  toggleSlideshow = () => {
+    if (this.state.playing) { this.stop(); this.setState({ playing: false }); }
+    else { this._iv = setInterval(this.nextPhoto, 2800); this.setState({ playing: true }); }
+  };
+
+  addComment = () => {
+    const text = this.state.draftComment.trim();
+    if (!text) return;
+    this.setState(s => {
+      const F = this.filtered(s);
+      const cur = F[s.lightbox];
+      if (!cur) return {};
+      const photos = s.photos.map(p => p.id === cur.id ? { ...p, comments: [...p.comments, { name: 'Vous', text }] } : p);
+      return { photos, draftComment: '' };
+    });
+  };
+
+  addMessage = () => {
+    const text = this.state.draftMsg.trim();
+    const name = this.state.draftName.trim() || 'Un invité';
+    if (!text) return;
+    this.setState(s => ({ messages: [{ name, text, date: "à l'instant" }, ...s.messages], draftName: '', draftMsg: '' }));
+    this.flash('Merci pour votre joli mot !');
+  };
+
+  submitUpload = () => {
+    this.setState(s => {
+      const photo = { id: Date.now(), table: s.uploadTable, g: Math.floor(Math.random() * this.grads.length), h: 160 + Math.floor(Math.random() * 70), caption: s.uploadCaption.trim(), comments: [] };
+      return { photos: [photo, ...s.photos], uploadCaption: '', tab: 'gallery', filter: s.uploadTable };
+    });
+    this.flash('Photo ajoutée à la galerie !');
+  };
+
+  flash(msg) {
+    if (this._tt) clearTimeout(this._tt);
+    this.setState({ toast: msg });
+    this._tt = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+
+  setDraftComment = (e) => this.setState({ draftComment: e.target.value });
+  setDraftName = (e) => this.setState({ draftName: e.target.value });
+  setDraftMsg = (e) => this.setState({ draftMsg: e.target.value });
+  setUploadCaption = (e) => this.setState({ uploadCaption: e.target.value });
+
+  // swipe on the lightbox image area
+  swipeRef = (el) => {
+    if (!el || el._bound) return;
+    el._bound = true;
+    let x0 = null;
+    el.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      if (x0 == null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (dx < -45) this.nextPhoto();
+      else if (dx > 45) this.prevPhoto();
+      x0 = null;
+    }, { passive: true });
+  };
+
+  chipStyle(active) {
+    const base = 'flex:none;padding:9px 17px;border-radius:22px;font-family:Jost,sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .18s;';
+    return active
+      ? base + 'border:1px solid #8c9a7b;background:#8c9a7b;color:#fbf9f2;'
+      : base + 'border:1px solid rgba(60,58,51,.16);background:#fcfaf4;color:#6e7c60;';
+  }
+
+  navStyle(active) {
+    const base = 'flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 0;font-family:Jost,sans-serif;';
+    return base + (active ? 'color:#6e7c60;' : 'color:#b0ad9f;');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const F = this.filtered(s);
+
+    const gridPhotos = F.map((p, i) => ({
+      tile: { background: this.grads[p.g], height: p.h + 'px' },
+      caption: p.caption,
+      hasCaption: !!p.caption,
+      tableName: this.tName(p.table),
+      hasComments: p.comments.length > 0,
+      commentCount: p.comments.length,
+      open: () => this.openLightbox(i),
+    }));
+
+    const filterChips = [{ id: 'all', name: 'Toutes' }, ...this.tableList].map(t => ({
+      name: t.name,
+      style: this.chipStyle(s.filter === t.id),
+      set: () => this.setFilter(t.id),
+    }));
+
+    const uploadChips = this.tableList.map(t => ({
+      name: t.name,
+      style: this.chipStyle(s.uploadTable === t.id),
+      set: () => this.setState({ uploadTable: t.id }),
+    }));
+
+    const cur = F[s.lightbox];
+    let current = { tableName: '', position: '', bigTile: {}, caption: '', hasCaption: false, comments: [], commentLabel: '' };
+    if (cur) {
+      const cc = cur.comments.length;
+      current = {
+        tableName: this.tName(cur.table),
+        position: (s.lightbox + 1) + ' / ' + F.length,
+        bigTile: { background: this.grads[cur.g], width: '100%', maxWidth: '340px', aspectRatio: '4 / 5', borderRadius: '14px', boxShadow: '0 10px 40px rgba(0,0,0,.4)' },
+        caption: cur.caption,
+        hasCaption: !!cur.caption,
+        comments: cur.comments.map(c => ({ name: c.name, text: c.text, initial: this.initial(c.name) })),
+        commentLabel: cc === 0 ? 'Soyez le premier à commenter' : cc === 1 ? '1 commentaire' : cc + ' commentaires',
+      };
+    }
+
+    return {
+      isHome: s.tab === 'home',
+      isGallery: s.tab === 'gallery',
+      isAdd: s.tab === 'add',
+      isGuestbook: s.tab === 'guestbook',
+      goHome: () => this.setTab('home'),
+      goGallery: () => this.setTab('gallery'),
+      goAdd: () => this.setTab('add'),
+      goGuestbook: () => this.setTab('guestbook'),
+      navHome: this.navStyle(s.tab === 'home'),
+      navGallery: this.navStyle(s.tab === 'gallery'),
+      navAdd: this.navStyle(s.tab === 'add'),
+      navGuestbook: this.navStyle(s.tab === 'guestbook'),
+
+      photoCount: s.photos.length,
+      filterChips,
+      uploadChips,
+      gridPhotos,
+      filterLabel: s.filter === 'all' ? 'Toutes les tables' : 'Table ' + this.tName(s.filter),
+
+      lightboxOpen: cur != null,
+      current,
+      isPlaying: s.playing,
+      isNotPlaying: !s.playing,
+      playBtn: 'width:40px;height:40px;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;' + (s.playing ? 'background:#8c9a7b;color:#fbf9f2;' : 'background:rgba(251,249,242,.14);color:#fbf9f2;'),
+      swipeRef: this.swipeRef,
+      prevPhoto: this.prevPhoto,
+      nextPhoto: this.nextPhoto,
+      closeLightbox: this.closeLightbox,
+      toggleSlideshow: this.toggleSlideshow,
+      draftComment: s.draftComment,
+      setDraftComment: this.setDraftComment,
+      addComment: this.addComment,
+
+      messagesList: s.messages.map(m => ({ name: m.name, text: m.text, date: m.date, initial: this.initial(m.name) })),
+      draftName: s.draftName,
+      draftMsg: s.draftMsg,
+      setDraftName: this.setDraftName,
+      setDraftMsg: this.setDraftMsg,
+      addMessage: this.addMessage,
+
+      uploadCaption: s.uploadCaption,
+      setUploadCaption: this.setUploadCaption,
+      submitUpload: this.submitUpload,
+
+      hasToast: !!s.toast,
+      toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

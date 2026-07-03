@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --page-bg: #e3ddd0;
+  --cream: #f5f1e8;
+  --card: #fcfaf4;
+  --ink: #3b3a33;
+  --muted: #a3a091;
+  --muted-2: #8a877c;
+  --muted-3: #b0ad9f;
+  --sage: #8c9a7b;
+  --sage-dark: #6e7c60;
+  --sage-light: #eef0e4;
+  --line: rgba(60, 58, 51, 0.14);
+}
+
+@theme inline {
+  --color-page-bg: var(--page-bg);
+  --color-cream: var(--cream);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-muted-3: var(--muted-3);
+  --color-sage: var(--sage);
+  --color-sage-dark: var(--sage-dark);
+  --color-sage-light: var(--sage-light);
+  --color-line: var(--line);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--page-bg);
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lbIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.4s ease both;
+}
+
+.animate-lb-in {
+  animation: lbIn 0.25s ease both;
+}
+
+.animate-toast-in {
+  animation: toastIn 0.3s ease both;
+}
