@@ -36,7 +36,8 @@ export function useGalleryData() {
     const channel = supabase
       .channel("public:photos")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "photos" }, (payload) => {
-        setPhotos((prev) => [payload.new as Photo, ...prev]);
+        const incoming = payload.new as Photo;
+        setPhotos((prev) => (prev.some((p) => p.id === incoming.id) ? prev : [incoming, ...prev]));
       })
       .subscribe();
 

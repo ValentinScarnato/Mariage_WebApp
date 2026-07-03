@@ -45,7 +45,8 @@ export function GuestbookView() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "guestbook_messages" },
         (payload) => {
-          setMessages((prev) => [payload.new as GuestbookMessage, ...prev]);
+          const incoming = payload.new as GuestbookMessage;
+          setMessages((prev) => (prev.some((m) => m.id === incoming.id) ? prev : [incoming, ...prev]));
         }
       )
       .subscribe();
