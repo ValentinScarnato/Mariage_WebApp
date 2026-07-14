@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGalleryData } from "@/lib/use-gallery-data";
@@ -8,6 +8,7 @@ import { PhotoGrid } from "@/components/photo-grid";
 import { Lightbox } from "@/components/lightbox";
 import { Slideshow } from "@/components/slideshow";
 import { BottomNav } from "@/components/bottom-nav";
+import { Chip } from "@/components/chip";
 import { siteConfig } from "@/lib/site-config";
 import { downloadAllPhotos } from "@/lib/download";
 
@@ -17,14 +18,25 @@ export function HomeView() {
   const [slideshowOpen, setSlideshowOpen] = useState(false);
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 0 });
-  const recent = photos.slice(0, 12);
+  const [filterSlug, setFilterSlug] = useState<string | null>(null);
+
+  const filtered = useMemo(() => {
+    if (!filterSlug) return photos;
+    const loc = locations.find((l) => l.slug === filterSlug);
+    if (!loc) return photos;
+    return photos.filter((p) => p.location_id === loc.id);
+  }, [photos, locations, filterSlug]);
+
+  const toggleFilter = (slug: string) => {
+    setFilterSlug((current) => (current === slug ? null : slug));
+  };
 
   const handleDownloadAll = async () => {
-    if (downloadingAll || photos.length === 0) return;
+    if (downloadingAll || filtered.length === 0) return;
     setDownloadingAll(true);
-    setProgress({ done: 0, total: photos.length });
+    setProgress({ done: 0, total: filtered.length });
     try {
-      await downloadAllPhotos(photos, (done, total) => setProgress({ done, total }));
+      await downloadAllPhotos(filtered, (done, total) => setProgress({ done, total }));
     } finally {
       setDownloadingAll(false);
     }
@@ -91,27 +103,24 @@ export function HomeView() {
       </div>
 
       <div className="flex items-baseline justify-between px-6 pb-3">
-        <h2 className="font-serif text-[22px] font-medium text-ink">Tables &amp; lieux</h2>
-        <span className="text-[12px] tracking-wide text-muted">sans QR code</span>
-      </div>
-      <div className="flex gap-2 overflow-x-auto px-6 pb-5">
-        {locations.map((loc) => (
-          <Link
-            key={loc.id}
-            href={`/lieu/${loc.slug}`}
-            className="flex-none rounded-2xl border border-line bg-card px-4 py-3 text-center"
-          >
-            <div className="text-[13px] font-medium text-ink">{loc.name}</div>
-          </Link>
-        ))}
-      </div>
-
-      <div className="flex items-baseline justify-between px-6 pb-3">
         <h2 className="font-serif text-[26px] font-medium text-ink">Les souvenirs</h2>
-        <span className="text-[12px] tracking-wide text-muted">{photos.length} photos</span>
+        <span className="text-[12px] tracking-wide text-muted">{filtered.length} photos</span>
       </div>
 
-      {photos.length > 0 && (
+      {locations.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto px-6 pb-4">
+          {locations.map((loc) => (
+            <Chip
+              key={loc.id}
+              label={loc.name}
+              active={filterSlug === loc.slug}
+              onClick={() => toggleFilter(loc.slug)}
+            />
+          ))}
+        </div>
+      )}
+
+      {filtered.length > 0 && (
         <div className="flex gap-2.5 px-6 pb-4">
           <button
             onClick={handleDownloadAll}
@@ -146,11 +155,11 @@ export function HomeView() {
         </div>
       )}
 
-      {!loading && <PhotoGrid photos={recent} onOpen={setOpenIndex} />}
+      {!loading && <PhotoGrid photos={filtered} onOpen={setOpenIndex} />}
 
       {openIndex !== null && (
         <Lightbox
-          photos={recent}
+          photos={filtered}
           index={openIndex}
           onClose={() => setOpenIndex(null)}
           onIndexChange={setOpenIndex}
@@ -158,7 +167,7 @@ export function HomeView() {
       )}
 
       {slideshowOpen && (
-        <Slideshow photos={photos} onClose={() => setSlideshowOpen(false)} />
+        <Slideshow photos={filtered} onClose={() => setSlideshowOpen(false)} />
       )}
 
       <BottomNav />
