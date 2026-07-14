@@ -26,6 +26,14 @@ export function Lightbox({
   const { name, setName } = useGuestName();
   const touchStartX = useRef<number | null>(null);
 
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
+
   const next = useCallback(() => {
     onIndexChange((index + 1) % photos.length);
   }, [index, photos.length, onIndexChange]);
@@ -83,7 +91,7 @@ export function Lightbox({
   };
 
   return (
-    <div className="fixed inset-0 z-50 mx-auto flex max-w-md animate-lb-in flex-col bg-[#201f1b]">
+    <div className="fixed inset-0 z-50 mx-auto flex h-[100dvh] max-w-md animate-lb-in flex-col bg-[#201f1b]">
       <div className="z-10 flex items-center justify-between px-5 pb-3 pt-12">
         <button
           onClick={onClose}

@@ -17,6 +17,14 @@ export function Slideshow({
   const [playing, setPlaying] = useState(true);
   const touchStartX = useRef<number | null>(null);
 
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
+
   const next = useCallback(() => {
     setIndex((i) => (i + 1 < photos.length ? i + 1 : i));
   }, [photos.length]);
@@ -67,7 +75,7 @@ export function Slideshow({
   const photo = photos[index];
 
   return (
-    <div className="fixed inset-0 z-50 mx-auto flex max-w-md animate-lb-in flex-col overflow-hidden bg-black">
+    <div className="fixed inset-0 z-50 mx-auto flex h-[100dvh] max-w-md animate-lb-in flex-col overflow-hidden bg-black">
       {photos.map((p, i) =>
         i === index ? (
           <div key={p.id} className="absolute inset-0 animate-slide-fade overflow-hidden bg-black">
