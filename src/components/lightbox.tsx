@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { supabase, photoPublicUrl } from "@/lib/supabase/client";
 import { useGuestName } from "@/lib/guest-name";
 import { downloadPhoto } from "@/lib/download";
@@ -90,7 +91,7 @@ export function Lightbox({
     touchStartX.current = null;
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 mx-auto flex h-[100dvh] max-w-md animate-lb-in flex-col bg-[#201f1b]">
       <div className="z-10 flex items-center justify-between px-5 pb-3 pt-12">
         <button
@@ -229,6 +230,7 @@ export function Lightbox({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

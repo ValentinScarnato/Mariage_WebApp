@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { photoPublicUrl } from "@/lib/supabase/client";
 import type { GridPhoto } from "@/components/photo-grid";
 
@@ -74,7 +75,7 @@ export function Slideshow({
   if (photos.length === 0) return null;
   const photo = photos[index];
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 mx-auto flex h-[100dvh] max-w-md animate-lb-in flex-col overflow-hidden bg-black">
       {photos.map((p, i) =>
         i === index ? (
@@ -177,6 +178,7 @@ export function Slideshow({
           ))}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
