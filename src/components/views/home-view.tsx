@@ -6,13 +6,29 @@ import Link from "next/link";
 import { useGalleryData } from "@/lib/use-gallery-data";
 import { PhotoGrid } from "@/components/photo-grid";
 import { Lightbox } from "@/components/lightbox";
+import { Slideshow } from "@/components/slideshow";
 import { BottomNav } from "@/components/bottom-nav";
 import { siteConfig } from "@/lib/site-config";
+import { downloadAllPhotos } from "@/lib/download";
 
 export function HomeView() {
   const { locations, photos, loading } = useGalleryData();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [slideshowOpen, setSlideshowOpen] = useState(false);
+  const [downloadingAll, setDownloadingAll] = useState(false);
+  const [progress, setProgress] = useState({ done: 0, total: 0 });
   const recent = photos.slice(0, 12);
+
+  const handleDownloadAll = async () => {
+    if (downloadingAll || photos.length === 0) return;
+    setDownloadingAll(true);
+    setProgress({ done: 0, total: photos.length });
+    try {
+      await downloadAllPhotos(photos, (done, total) => setProgress({ done, total }));
+    } finally {
+      setDownloadingAll(false);
+    }
+  };
 
   return (
     <div className="animate-fade-up pb-[100px]">
@@ -95,6 +111,41 @@ export function HomeView() {
         <span className="text-[12px] tracking-wide text-muted">{photos.length} photos</span>
       </div>
 
+      {photos.length > 0 && (
+        <div className="flex gap-2.5 px-6 pb-4">
+          <button
+            onClick={handleDownloadAll}
+            disabled={downloadingAll}
+            className="flex h-[46px] flex-1 items-center justify-center gap-2 rounded-2xl border border-line bg-card text-[13px] font-medium text-sage-dark disabled:opacity-60"
+          >
+            {downloadingAll ? (
+              <>
+                <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                  <path d="M12 3a9 9 0 1 0 9 9" />
+                </svg>
+                {progress.total > 0 ? `${progress.done} / ${progress.total}` : "Préparation…"}
+              </>
+            ) : (
+              <>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16" />
+                </svg>
+                Tout télécharger
+              </>
+            )}
+          </button>
+          <button
+            onClick={() => setSlideshowOpen(true)}
+            className="flex h-[46px] flex-1 items-center justify-center gap-2 rounded-2xl border border-line bg-card text-[13px] font-medium text-sage-dark"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 4v16l14-8z" />
+            </svg>
+            Diaporama
+          </button>
+        </div>
+      )}
+
       {!loading && <PhotoGrid photos={recent} onOpen={setOpenIndex} />}
 
       {openIndex !== null && (
@@ -104,6 +155,10 @@ export function HomeView() {
           onClose={() => setOpenIndex(null)}
           onIndexChange={setOpenIndex}
         />
+      )}
+
+      {slideshowOpen && (
+        <Slideshow photos={photos} onClose={() => setSlideshowOpen(false)} />
       )}
 
       <BottomNav />

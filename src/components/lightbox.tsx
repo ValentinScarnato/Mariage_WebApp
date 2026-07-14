@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase, photoPublicUrl } from "@/lib/supabase/client";
 import { useGuestName } from "@/lib/guest-name";
+import { downloadPhoto } from "@/lib/download";
 import type { PhotoComment } from "@/lib/types";
 import type { GridPhoto } from "@/components/photo-grid";
 
@@ -21,6 +22,7 @@ export function Lightbox({
   const [comments, setComments] = useState<PhotoComment[]>([]);
   const [draftComment, setDraftComment] = useState("");
   const [posting, setPosting] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const { name, setName } = useGuestName();
   const touchStartX = useRef<number | null>(null);
 
@@ -101,7 +103,30 @@ export function Lightbox({
             {index + 1} / {photos.length}
           </div>
         </div>
-        <div className="w-10" />
+        <button
+          onClick={async () => {
+            if (downloading) return;
+            setDownloading(true);
+            try {
+              await downloadPhoto(photo);
+            } finally {
+              setDownloading(false);
+            }
+          }}
+          disabled={downloading}
+          aria-label="Télécharger la photo"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-cream/15 text-cream disabled:opacity-60"
+        >
+          {downloading ? (
+            <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+              <path d="M12 3a9 9 0 1 0 9 9" />
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16" />
+            </svg>
+          )}
+        </button>
       </div>
 
       <div
