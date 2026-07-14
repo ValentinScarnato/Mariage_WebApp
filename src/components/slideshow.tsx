@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { photoPublicUrl } from "@/lib/supabase/client";
 import type { GridPhoto } from "@/components/photo-grid";
 
@@ -15,18 +15,32 @@ export function Slideshow({
 }) {
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const touchStartX = useRef<number | null>(null);
+
+  const next = useCallback(() => {
+    setIndex((i) => (i + 1 < photos.length ? i + 1 : i));
+  }, [photos.length]);
+
+  const prev = useCallback(() => {
+    setIndex((i) => (i > 0 ? i - 1 : i));
+  }, []);
 
   useEffect(() => {
+    if (index === photos.length - 1) {
+      if (!playing) return;
+      const t = setTimeout(onClose, SLIDE_DURATION);
+      return () => clearTimeout(t);
+    }
     if (!playing || photos.length < 2) return;
-    const t = setTimeout(() => setIndex((i) => (i + 1) % photos.length), SLIDE_DURATION);
+    const t = setTimeout(next, SLIDE_DURATION);
     return () => clearTimeout(t);
-  }, [index, playing, photos.length]);
+  }, [index, playing, photos.length, next, onClose]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      else if (e.key === "ArrowRight") setIndex((i) => (i + 1) % photos.length);
-      else if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + photos.length) % photos.length);
+      else if (e.key === "ArrowRight") next();
+      else if (e.key === "ArrowLeft") prev();
       else if (e.key === " ") {
         e.preventDefault();
         setPlaying((p) => !p);
@@ -34,7 +48,20 @@ export function Slideshow({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, photos.length]);
+  }, [onClose, next, prev]);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) > 45) {
+      if (dx < 0) next();
+      else prev();
+    }
+  };
 
   if (photos.length === 0) return null;
   const photo = photos[index];
@@ -43,18 +70,41 @@ export function Slideshow({
     <div className="fixed inset-0 z-50 mx-auto flex max-w-md animate-lb-in flex-col overflow-hidden bg-black">
       {photos.map((p, i) =>
         i === index ? (
-          <div key={p.id} className="absolute inset-0 animate-slide-fade overflow-hidden">
+          <div key={p.id} className="absolute inset-0 animate-slide-fade overflow-hidden bg-black">
+            <img
+              src={photoPublicUrl(p.storage_path)}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-2xl"
+            />
             <img
               src={photoPublicUrl(p.storage_path)}
               alt={p.caption ?? ""}
-              className="h-full w-full animate-ken-burns object-cover"
+              className="relative h-full w-full animate-ken-burns object-contain"
             />
           </div>
         ) : null
       )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-black/45" />
 
-      <div className="relative z-10 flex items-center justify-between px-5 pb-3 pt-12">
+      <div
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        className="absolute inset-0 z-10 flex"
+      >
+        <button
+          aria-label="Photo précédente"
+          onClick={prev}
+          className="h-full w-1/3"
+        />
+        <button
+          aria-label="Photo suivante"
+          onClick={next}
+          className="h-full w-2/3"
+        />
+      </div>
+
+      <div className="relative z-20 flex items-center justify-between px-5 pb-3 pt-12">
         <button
           onClick={onClose}
           className="flex h-10 w-10 items-center justify-center rounded-full bg-cream/15 text-cream"
@@ -83,7 +133,7 @@ export function Slideshow({
         </button>
       </div>
 
-      <div className="relative z-10 mt-auto px-6 pb-10 text-cream">
+      <div className="pointer-events-none relative z-20 mt-auto px-6 pb-10 text-cream">
         {(photo.caption || photo.locationName) && (
           <div className="mb-4">
             {photo.caption && (
